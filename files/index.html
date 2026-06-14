@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div id="tree"></div>
+
+    <script>
+        async function renderTree() {
+            const response = await fetch('structure.json');
+            const data = await response.json();
+            document.getElementById('tree').appendChild(createNode(data));
+        }
+
+        function createNode(node) {
+            const li = document.createElement('li');
+            if (node.type === 'dir') {
+                li.innerHTML = `<strong>📁 ${node.name}</strong>`;
+                const ul = document.createElement('ul');
+                node.children.forEach(child => ul.appendChild(createNode(child)));
+                li.appendChild(ul);
+            } else {
+                li.innerHTML = `<a href="${node.path}">${node.name}</a>`;
+            }
+            return li;
+        }
+
+        renderTree();
+    </script>
+</body>
+</html>
